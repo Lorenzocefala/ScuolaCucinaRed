@@ -5,6 +5,8 @@
 
 -- USEGO
 
+use cucina;
+
 SET FOREIGN_KEY_CHECKS=0;
 -- GO
 
@@ -26,7 +28,7 @@ CREATE TABLE `amministratori`
 	`email` varchar (50), 
 	`telefono` varchar (50),
 	PRIMARY KEY (`id_amministratore`)
-) 
+); 
 -- GO
 
 --
@@ -53,7 +55,7 @@ CREATE TABLE `calendario`
 	`aula` varchar (50), 
 	`docente` varchar (50),
 	PRIMARY KEY (`id_edizione`)
-) 
+); 
 -- GO
 
 --
@@ -100,7 +102,7 @@ CREATE TABLE `catalogo`
 	`costo` double (13,2), 
 	`descrizione` varchar (2000),
 	PRIMARY KEY (`id_corso`)
-)
+); 
 -- GO
 
 --
@@ -143,7 +145,7 @@ CREATE TABLE `categoria`
 	`id_categoria` integer (11) NOT NULL AUTO_INCREMENT , 
 	`descrizione` varchar (50),
 	PRIMARY KEY (`id_categoria`)
-) 
+); 
 -- GO
 
 --
@@ -181,7 +183,7 @@ CREATE TABLE `feedback`
 	`descrizione` varchar (50), 
 	`voto` integer (11),
 	PRIMARY KEY (`id_feedback`)
-) 
+); 
 -- GO
 
 --
@@ -222,7 +224,7 @@ CREATE TABLE `iscritti`
 	`id_edizione` integer (11) NOT NULL DEFAULT 0, 
 	`id_utente` varchar (50) NOT NULL,
 	PRIMARY KEY (`id_edizione`, `id_utente`)
-) 
+); 
 -- GO
 
 --
@@ -253,7 +255,7 @@ CREATE TABLE `mail`
 	`data` varchar (50), 
 	`body` varchar (200),
 	PRIMARY KEY (`id`)
-) 
+); 
 -- GO
 
 --
@@ -277,7 +279,7 @@ CREATE TABLE `registrati`
 	`email` varchar (50), 
 	`telefono` varchar (50),
 	PRIMARY KEY (`id_utente`)
-) 
+); 
 -- GO
 
 --
