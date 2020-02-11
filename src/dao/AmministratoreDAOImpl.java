@@ -132,8 +132,9 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 			amministratore = new Utente(idUtente,password,nome,cognome,dataNascita,email,telefono, true);
 			return amministratore;
 		}
-		else
+		else {
 			throw new SQLException("amministratore: " + idAmministratore + " non presente");
+		}
 	}
 	
 	public static void main(String[] args) throws Exception{

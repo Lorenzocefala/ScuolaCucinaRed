@@ -2,75 +2,74 @@ package dao;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import org.junit.jupiter.api.Test;
 
 import entity.Utente;
-import exceptions.ConnessioneException;
 
 class AmministratoreDAOImplTest {
 
 	@Test
 	void insert() throws Exception {
-		Utente u = new Utente("2", "password", "aa", "bb", new java.util.Date(), "pp@gmail.com", "123456789", true);
+		AmministratoreDAO dao = new AmministratoreDAOImpl();
+		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
 		try {
-			AmministratoreDAO dao = new AmministratoreDAOImpl();
-//			DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-//			Date date = df.parse("1975-02-25");
+			Utente u = new Utente("2", "password", "aa", "bb", df.parse("1975-02-25"), "pp@gmail.com", "123456789",
+					true);
+
 			dao.insert(u);
-			assertEquals("2", u.getIdUtente());
-			assertEquals("password", u.getPassword());
-			assertEquals("aa", u.getNome());
-			assertEquals("bb", u.getCognome());
-//          assertEquals("", u.getDataNascita());
-			assertEquals("pp@gmail.com", u.getEmail());
-			assertEquals("123456789", u.getTelefono());
+			Utente result = dao.select("2");
+
+			assertEquals(result.getIdUtente(), u.getIdUtente());
+			assertEquals(result.getPassword(), u.getPassword());
+			assertEquals(result.getNome(), u.getNome());
+			assertEquals(result.getCognome(), u.getCognome());
+			assertEquals(result.getEmail(), u.getEmail());
+			assertEquals(result.getTelefono(), u.getTelefono());
+
+			dao.delete("2");
 		} catch (Exception ex) {
-			fail("UEx" + ex.getMessage());
+			fail("Unexpected exception: " + ex.getMessage());
+		} finally {
+			try {
+				dao.select("2");
+				fail("Select should have thrown an exception here!");
+			} catch (Exception ex) {
+				// as expected
+			}
 		}
+
 	}
 
 	@Test
-	void select() throws Exception {
-		Utente u = new Utente("2", "password", "aa", "bb", new java.util.Date(), "pp@gmail.com", "123456789", true);
+	void update() throws Exception {
+		DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+		AmministratoreDAO dao = new AmministratoreDAOImpl();
 		try {
-			AmministratoreDAO dao = new AmministratoreDAOImpl();
-			dao.select("2");
-			assertEquals("2", u.getIdUtente());
-		} catch (Exception ex) {
-			fail("UEx" + ex.getMessage());
-		}
-	}
+			Utente u = new Utente("2", "password", "aa", "bb", df.parse("1975-02-25"), "pp@gmail.com", "123456789",
+					true);
+			dao.insert(u);
 
-	@Test
-	void set() throws Exception {
-		Utente u = new Utente("2", "password", "aa", "bb", new java.util.Date(), "pp@gmail.com", "123456789", true);
-		try {
-			AmministratoreDAO dao = new AmministratoreDAOImpl();
 			u.setCognome("Doria");
-			assertEquals("Doria", u.getCognome());
+			dao.update(u);
+
+			Utente result = dao.select("2");
+
+			assertEquals(result.getCognome(), u.getCognome());
+
+			dao.delete("2");
 		} catch (Exception ex) {
-			fail("UEx" + ex.getMessage());
+			fail("Unexpected exception: " + ex.getMessage());
+		} finally {
+			try {
+				dao.select("2");
+				fail("Select should have thrown an exception here!");
+			} catch (Exception ex) {
+				// as expected
+			}
 		}
 	}
-	
-	@Test
-	void delete() throws Exception {
-		Utente u = new Utente("2", "password", "aa", "bb", new java.util.Date(), "pp@gmail.com", "123456789", true);
-		try {
-			AmministratoreDAO dao = new AmministratoreDAOImpl();
-			dao.delete("aa");
-//			assertEquals("", u.getNome());
-		} catch (Exception ex) {
-			fail("UEx" + ex.getMessage());
-		}
-	}
-		
-//		u.setCognome("Doria");
-//		dao.delete("aa");
-//		dao.update(u);
-//		System.out.println(dao.select("marco81"));
-	}
+
+}

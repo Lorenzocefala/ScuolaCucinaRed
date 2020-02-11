@@ -1,3 +1,10 @@
+-- DBTools Manager Professional (Enterprise Edition)
+-- Database Dump for: cucina
+-- Backup Generated in: 23/04/2010 18:50:33
+-- Database Server Version: MySQL 5.1.26
+
+-- USEGO
+
 use cucina;
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -272,7 +279,7 @@ CREATE TABLE `registrati`
 	`email` varchar (50), 
 	`telefono` varchar (50),
 	PRIMARY KEY (`id_utente`)
-); 
+);
 -- GO
 
 --
