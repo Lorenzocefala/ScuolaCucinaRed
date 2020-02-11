@@ -18,9 +18,13 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 		conn = SingletonConnection.getInstance();
 	}
 
-	/*
-	 * registrazione di un nuovo utente alla scuola di formazione se l'utente già
-	 * esiste si solleva una eccezione
+	/**
+	 * registrazione di un nuovo utente alla scuola di formazione
+	 * se l'utente già esiste si solleva una eccezione
+	 * 
+	 * @param u the user to be inserted
+	 * 
+	 * @throws SQLException if user already exists
 	 */
 	@Override
 	public void insert(Utente u) throws SQLException {
