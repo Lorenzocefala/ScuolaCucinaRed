@@ -70,9 +70,5 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 		boolean adm = false;
 
 		return new Utente(idUtente, password, nome, cognome, d, email, telefono, adm);
-
-
-
 	}
-
 }

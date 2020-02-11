@@ -33,7 +33,7 @@ public class UtenteServiceImpl implements UtenteService {
 		try {
 			daoU.insert(u);
 		} catch (SQLException e) {
-			throw new DAOException("impossibile inserire l'utente", e);
+			throw new DAOException("Utente già registrato! :'(", e);
 		}
 		
 	}
