@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -21,9 +22,17 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 	 */
 	@Override
 	public void insert(Utente u) throws SQLException {
-		// TODO Auto-generated method stub
 
-	}
+			PreparedStatement ps=conn.prepareStatement("INSERT INTO registrati(id_utente,password,nome,cognome,dataNascita,email,telefono) VALUES (?,?,?,?,?,?,?)");
+			ps.setString(1, u.getIdUtente());
+			ps.setString(2, u.getPassword());
+			ps.setString(3, u.getNome());
+			ps.setString(4, u.getCognome());
+			ps.setDate(5, new java.sql.Date(u.getDataNascita().getTime()));
+			ps.setString(6, u.getEmail());
+			ps.setString(7, u.getTelefono());
+			ps.executeUpdate();
+		}
 
 	/*
 	 * modifica di tutti i dati di un utente
@@ -32,9 +41,20 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 	 */
 	@Override
 	public void update(Utente u) throws SQLException {
-		// TODO Auto-generated method stub
 
-	}
+			PreparedStatement ps=conn.prepareStatement("UPDATE registrati SET password=?, nome=?, cognome=?, dataNascita=?, email=?, telefono=? where id_amministratore=?");
+			ps.setString(1, u.getPassword());
+			ps.setString(2, u.getNome());
+			ps.setString(3, u.getCognome());
+			ps.setDate(4, new java.sql.Date(u.getDataNascita().getTime()));
+			ps.setString(5, u.getEmail());
+			ps.setString(6, u.getTelefono());
+			ps.setString(7, u.getIdUtente());
+			int n = ps.executeUpdate();
+			if(n==0)
+				throw new SQLException("utente: " + u.getIdUtente() + " non presente");
+
+		}
 
 	/*
 	 * cancellazione di un singolo utente
