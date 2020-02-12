@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -18,13 +19,16 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 	
 	/*
 	 * iscrizione di un certo utente ad una certa edizione di un corso.
-	 * sia l'utente che l'edizione devono già essere stati registrati in precedenza
-	 * se l'utente e/o l'edizione non esistono o l'utente è già iscritto a quella edizione si solleva una eccezione
+	 * sia l'utente che l'edizione devono giÃ  essere stati registrati in precedenza
+	 * se l'utente e/o l'edizione non esistono o l'utente Ã© giÃ  iscritto a quella edizione si solleva una eccezione
 	 */
 	@Override
 	public void iscriviUtente(int idEdizione, String idUtente) throws SQLException {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO iscritti(id_utente, id_edizione) VALUES (?,?)");
+		ps.setString(1, idUtente);
+		ps.setInt(2, idEdizione);
 
+		// ...
 	}
 
 	/*
@@ -39,8 +43,8 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 	}
 
 	/*
-	 * lettura di tutte le edizioni a cui è iscritto un utente
-	 * se l'utente non esiste o non è iscritto a nessuna edizione si torna una lista vuota
+	 * lettura di tutte le edizioni a cui ï¿½ iscritto un utente
+	 * se l'utente non esiste o non ï¿½ iscritto a nessuna edizione si torna una lista vuota
 	 */
 	@Override
 	public ArrayList<Edizione> selectIscrizioniUtente(String idUtente) throws SQLException {

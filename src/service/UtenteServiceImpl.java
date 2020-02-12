@@ -15,38 +15,38 @@ import exceptions.DAOException;
 public class UtenteServiceImpl implements UtenteService {
 
 	// dichiarare qui tutti i dao di cui si ha bisogno
-	private RegistrazioneUtenteDAO daoUtente;
+	private RegistrazioneUtenteDAO daoRegUtente;
 	// ... dichiarazione di altri eventuali DAO
 
 	// costruire qui tutti i dao di cui si ha bisogno
 	public UtenteServiceImpl() throws ConnessioneException {
-		daoUtente = new RegistrazioneUtenteDAOImpl();
+		daoRegUtente = new RegistrazioneUtenteDAOImpl();
 		// ... costruzione dei altri eventuali dao
 	}
 
 	/*
-	 * registrazione nel sistema di un nuovo utente Se l'utente è già presente si
+	 * registrazione nel sistema di un nuovo utente Se l'utente Ã¨ giÃ  presente si
 	 * solleva una eccezione
 	 */
 	@Override
 	public void registrazioneUtente(Utente u) throws DAOException {
 		try {
-			daoUtente.insert(u);
+			daoRegUtente.insert(u);
 		} catch (SQLException e) {
-			throw new DAOException("Utente già registrato! :'(", e);
+			throw new DAOException("Utente giÃ  registrato! :'(", e);
 		}
 	}
 
 	/**
-	 * controllo della presenza di un utente in base a idUtente e password
-	 * Se l'utente è presente viene recuperato e ritornato
-	 * Se l'utente non è presente (o password errata) si solleva una eccezione
+	 * controllo della presenza di un utente in base a idUtente e password Se
+	 * l'utente ï¿½ presente viene recuperato e ritornato Se l'utente non ï¿½ presente
+	 * (o password errata) si solleva una eccezione
 	 */
 	@Override
 	public Utente checkCredenziali(String idUtente, String psw) throws DAOException {
 		try {
-			Utente result = daoUtente.select(idUtente);
-			if(!result.getPassword().equals(psw)) {
+			Utente result = daoRegUtente.select(idUtente);
+			if (!result.getPassword().equals(psw)) {
 				throw new DAOException("Password errata");
 			}
 			return result;
@@ -56,24 +56,31 @@ public class UtenteServiceImpl implements UtenteService {
 	}
 
 	/*
-	 * cancellazione di un utente dal sistema l'utente è cancellabile solo se non vi
-	 * sono dati correlati. (ad esempio, non è (o è stato) iscritto a nessuna
-	 * edizione) se l'utente non è cancellabile si solleva una eccezione
+	 * cancellazione di un utente dal sistema l'utente Ã¨ cancellabile solo se non vi
+	 * sono dati correlati. (ad esempio, non Ã¨ (o Ã¨ stato) iscritto a nessuna
+	 * edizione) se l'utente non Ã¨ cancellabile si solleva una eccezione
 	 * 
 	 */
 	@Override
 	public void cancellaRegistrazioneUtente(String idUtente) throws DAOException {
-		// TODO Auto-generated method stub
-
+		try {
+			daoRegUtente.delete(idUtente);
+		} catch (SQLException e) {
+			throw new DAOException("Impossibile eliminare l'utenza", e);
+		}
 	}
 
 	/*
 	 * modifica tutti i dati di un utente l'utente viene individuato in base a
-	 * idUtente se l'utente non è presente si solleva una eccezione
+	 * idUtente se l'utente non Ã¨ presente si solleva una eccezione
 	 */
 	@Override
 	public void modificaDatiUtente(Utente u) throws DAOException {
-		// TODO Auto-generated method stub
+		try {
+			daoRegUtente.update(u);
+		} catch (SQLException e) {
+			throw new DAOException("utente " + u.getIdUtente() + " non presente", e);
+		}
 
 	}
 
@@ -83,15 +90,19 @@ public class UtenteServiceImpl implements UtenteService {
 	 */
 	@Override
 	public ArrayList<Utente> visualizzaUtentiRegistrati() throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			ArrayList<Utente> result = daoRegUtente.select();
+			return result;
+		} catch (SQLException e) {
+			throw new DAOException("non sono presenti utenti registrati", e);
+		}
 	}
 
 	/*
-	 * inserisce un feedback per una certa edizione Un utente può inserire un
-	 * feedback solo per i corsi già frequentati (e terminati) e solo se non lo ha
-	 * già fatto in precedenza (un solo feedback ad utente per edizione) se l'utente
-	 * non può insierire un feedback si solleva una eccezione
+	 * inserisce un feedback per una certa edizione Un utente puï¿½ inserire un
+	 * feedback solo per i corsi giÃ  frequentati (e terminati) e solo se non lo ha
+	 * giÃ  fatto in precedenza (un solo feedback ad utente per edizione) se l'utente
+	 * non puÃ² insierire un feedback si solleva una eccezione
 	 */
 	@Override
 	public void inserisciFeedback(Feedback f) throws DAOException {
@@ -100,9 +111,9 @@ public class UtenteServiceImpl implements UtenteService {
 	}
 
 	/*
-	 * modifica della descrizione e/o del voto di un feedback il feedback è
+	 * modifica della descrizione e/o del voto di un feedback il feedback ï¿½
 	 * modificabile solo da parte dell'utente che lo ha inserito e solo entro un
-	 * mese dal termine della edizione del corso se l'utente non può modificare un
+	 * mese dal termine della edizione del corso se l'utente non puï¿½ modificare un
 	 * feedback si solleva una eccezione
 	 */
 	@Override
@@ -112,9 +123,9 @@ public class UtenteServiceImpl implements UtenteService {
 	}
 
 	/*
-	 * eliminazione di un feedback il feedback è cancellabile solo da parte
+	 * eliminazione di un feedback il feedback ï¿½ cancellabile solo da parte
 	 * dell'utente che lo ha inserito e solo entro un mese dal termine della
-	 * edizione del corso se l'utente non può cancellare un feedback si solleva una
+	 * edizione del corso se l'utente non puï¿½ cancellare un feedback si solleva una
 	 * eccezione
 	 */
 	@Override

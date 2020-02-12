@@ -19,8 +19,8 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 	}
 
 	/**
-	 * registrazione di un nuovo utente alla scuola di formazione
-	 * se l'utente già esiste si solleva una eccezione
+	 * registrazione di un nuovo utente alla scuola di formazione se l'utente giï¿½
+	 * esiste si solleva una eccezione
 	 * 
 	 * @param u the user to be inserted
 	 * 
@@ -64,19 +64,18 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 	}
 
 	/*
-	 * cancellazione di un singolo utente l'utente si può cancellare solo se non è
-	 * correlato ad altri dati se l'utente non esiste o non è cancellabile si
+	 * cancellazione di un singolo utente l'utente si puÃ² cancellare solo se non Ã¨
+	 * correlato ad altri dati se l'utente non esiste o non Ã¨ cancellabile si
 	 * solleva una eccezione
 	 */
 	@Override
 	public void delete(String idUtente) throws SQLException {
-
 		PreparedStatement ps = conn.prepareStatement("DELETE FROM registrati WHERE id_utente=?");
 		ps.setString(1, idUtente);
 		int n = ps.executeUpdate();
-		if (n == 0)
+		if (n == 0) {
 			throw new SQLException("utente " + idUtente + " non presente");
-
+		}
 	}
 
 	/*
@@ -102,7 +101,11 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 			Utente result = new Utente(idUtente, password, nome, cognome, dataNascita, email, telefono, false);
 			registrati.add(result);
 		}
-		return registrati;
+		if (registrati.size() == 0) {
+			throw new SQLException("non sono presenti utenti registrati");
+		} else {
+			return registrati;
+		}
 	}
 
 	/*
@@ -119,7 +122,7 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 		ResultSet rs = ps.executeQuery();
 		Utente result = null;
 		if (rs.next()) {
-				   idUtente = rs.getString("id_utente");
+			idUtente = rs.getString("id_utente");
 			String password = rs.getString("password");
 			String nome = rs.getString("nome");
 			String cognome = rs.getString("cognome");
