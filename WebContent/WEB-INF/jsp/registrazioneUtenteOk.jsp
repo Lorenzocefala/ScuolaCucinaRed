@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,8 +8,20 @@
 </head>
 <body>
 
-<h1>registrazione avvenuta con successo!</h1> 
-<!-- <img src="/assets/img/bootstrap.svg" alt="" width="32" height="32" title="House"> Per tornare alla home clicca qui:<a href= " registraUtente.jsp"> </a>-->
+	<h1>
+		<b>Registrazione avvenuta con successo!</b>
+	</h1>
+
+
+	<p>
+		<a href="http://localhost:8080/ScuolaCucina11/regUtente"> <figure>
+			<img
+				src="https://bloomdale.com.au/wp-content/uploads/2019/10/house-icon.png"
+				width="62" height="42">
+			<i>Cliccami e ti porto alla pagina inziale!</i>
+			</figcaption></a>
+	</p>
 
 </body>
 </html>
+
