@@ -4,10 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Registrazione utente avvenuta con successo</title>
 </head>
 <body>
 
-registrazione avvenuta con successo
+<h1>registrazione avvenuta con successo!</h1> 
+<!-- <img src="/assets/img/bootstrap.svg" alt="" width="32" height="32" title="House"> Per tornare alla home clicca qui:<a href= " registraUtente.jsp"> </a>-->
+
 </body>
 </html>
