@@ -98,7 +98,8 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 		
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			String result = rs.getString("id_utente");
+		//	Utente result = rs.getString("id_utente");
+		//	utenti.add(result);
 		
 		
 	}
