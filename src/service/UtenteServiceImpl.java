@@ -97,11 +97,14 @@ public class UtenteServiceImpl implements UtenteService {
 			throw new DAOException("non sono presenti utenti registrati", e);
 		}
 	}
+	
+	// da rivedere
 
 	/*
-	 * inserisce un feedback per una certa edizione Un utente pu� inserire un
-	 * feedback solo per i corsi già frequentati (e terminati) e solo se non lo ha
-	 * già fatto in precedenza (un solo feedback ad utente per edizione) se l'utente
+	 * inserisce un feedback per una certa edizione
+	 *  Un utente pu� inserire un feedback solo per i corsi già frequentati e già terminati e solo se non lo ha
+	 * già fatto in precedenza (un solo feedback ad utente per edizione) 
+	 * se l'utente
 	 * non può insierire un feedback si solleva una eccezione
 	 */
 	@Override

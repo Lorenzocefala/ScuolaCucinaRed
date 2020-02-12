@@ -42,8 +42,8 @@ public class EdizioneServiceImpl implements EdizioneService{
 
 	/*
 	 * cancella una edizione esistente.
-	 * E' possibile cancellare una edizione soltanto se la data di inizio è antecedente a quella odierna
-	 * Nel caso l'edizione sia cancellabile, è necessario cancellare l'iscrizione a tutti gli utenti iscritti
+	 * E' possibile cancellare una edizione soltanto se la data di inizio ï¿½ antecedente a quella odierna
+	 * Nel caso l'edizione sia cancellabile, ï¿½ necessario cancellare l'iscrizione a tutti gli utenti iscritti
 	 */
 	@Override
 	public void cancellaEdizione(int idEdizione) throws DAOException {
@@ -53,7 +53,7 @@ public class EdizioneServiceImpl implements EdizioneService{
 
 	/*
 	 * iscrive un utente ad una edizione 
-	 * un utente si può iscrivere solo se ci sono ancora posti disponibili considerato che ogni corso a un numero massimo di partecipanti
+	 * un utente si puÃ² iscrivere solo se ci sono ancora posti disponibili considerato che ogni corso HA un numero massimo di partecipanti
 	 */
 	@Override
 	public void iscriviUtente(int idEdizione, int idUtente) throws DAOException {
