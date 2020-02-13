@@ -121,7 +121,7 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 
 		ResultSet rs = ps.executeQuery();
 		Utente result = null;
-		if (rs.next()) {
+		while (rs.next()) {
 			idUtente = rs.getString("id_utente");
 			String password = rs.getString("password");
 			String nome = rs.getString("nome");
@@ -131,6 +131,8 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 			String telefono = rs.getString("telefono");
 
 			result = new Utente(idUtente, password, nome, cognome, dataNascita, email, telefono, true);
+		}
+		if (result != null) {
 			return result;
 		} else {
 			throw new SQLException("amministratore: " + idUtente + " non presente");

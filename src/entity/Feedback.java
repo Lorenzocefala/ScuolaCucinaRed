@@ -10,7 +10,7 @@ public class Feedback {
 	
 	public Feedback(){}
 	
-	public Feedback(int idEdizione, String idUtente, String descrizione, int voto) {
+	public Feedback(int idFeedback, int idEdizione, String idUtente, String descrizione, int voto) {
 		this.descrizione = descrizione;
 		this.voto = voto;
 		this.idEdizione=idEdizione;

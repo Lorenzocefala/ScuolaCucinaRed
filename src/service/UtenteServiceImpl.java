@@ -3,8 +3,6 @@ package service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import dao.CatalogoDAO;
-import dao.CatalogoDAOImpl;
 import dao.FeedbackDAO;
 import dao.RegistrazioneUtenteDAO;
 import dao.RegistrazioneUtenteDAOImpl;
@@ -116,10 +114,10 @@ public class UtenteServiceImpl implements UtenteService {
 	}
 
 	/*
-	 * modifica della descrizione e/o del voto di un feedback. 
-	 * Il feedback è modificabile solo da parte dell'utente che lo ha inserito e
-	 * solo entro un mese dal termine della edizione del corso
-	 * Se l'utente non può modificare un feedback si solleva una eccezione.
+	 * modifica della descrizione e/o del voto di un feedback. Il feedback è
+	 * modificabile solo da parte dell'utente che lo ha inserito e solo entro un
+	 * mese dal termine della edizione del corso Se l'utente non può modificare un
+	 * feedback si solleva una eccezione.
 	 */
 	@Override
 	public void modificaFeedback(Feedback feedback) throws DAOException {
@@ -139,8 +137,10 @@ public class UtenteServiceImpl implements UtenteService {
 	 */
 	@Override
 	public void cancellaFeedback(int idFeedback) throws DAOException {
-		// TODO Auto-generated method stub
-
+		try {
+			daoFeedUtente.delete(idFeedback);
+		} catch (SQLException e) {
+			throw new DAOException("Impossibile eliminare il feedback", e);
+		}
 	}
-
 }
