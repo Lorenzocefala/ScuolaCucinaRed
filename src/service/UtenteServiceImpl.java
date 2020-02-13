@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import dao.CatalogoDAO;
 import dao.CatalogoDAOImpl;
+import dao.FeedbackDAO;
 import dao.RegistrazioneUtenteDAO;
 import dao.RegistrazioneUtenteDAOImpl;
 import entity.Feedback;
@@ -16,6 +17,7 @@ public class UtenteServiceImpl implements UtenteService {
 
 	// dichiarare qui tutti i dao di cui si ha bisogno
 	private RegistrazioneUtenteDAO daoRegUtente;
+	private FeedbackDAO daoFeedUtente;
 	// ... dichiarazione di altri eventuali DAO
 
 	// costruire qui tutti i dao di cui si ha bisogno
@@ -97,38 +99,42 @@ public class UtenteServiceImpl implements UtenteService {
 			throw new DAOException("non sono presenti utenti registrati", e);
 		}
 	}
-	
-	// da rivedere
 
 	/*
-	 * inserisce un feedback per una certa edizione
-	 *  Un utente pu� inserire un feedback solo per i corsi già frequentati e già terminati e solo se non lo ha
-	 * già fatto in precedenza (un solo feedback ad utente per edizione) 
-	 * se l'utente
-	 * non può insierire un feedback si solleva una eccezione
+	 * inserisce un feedback per una certa edizione Un utente può inserire un
+	 * feedback solo per i corsi già frequentati e già terminati e solo se non lo ha
+	 * già fatto in precedenza (un solo feedback ad utente per edizione) se l'utente
+	 * non può inserire un feedback si solleva una eccezione
 	 */
 	@Override
 	public void inserisciFeedback(Feedback f) throws DAOException {
-		// TODO Auto-generated method stub
-
+		try {
+			daoFeedUtente.insert(f);
+		} catch (SQLException e) {
+			throw new DAOException("impossibile inserire feedback", e);
+		}
 	}
 
 	/*
-	 * modifica della descrizione e/o del voto di un feedback il feedback �
-	 * modificabile solo da parte dell'utente che lo ha inserito e solo entro un
-	 * mese dal termine della edizione del corso se l'utente non pu� modificare un
-	 * feedback si solleva una eccezione
+	 * modifica della descrizione e/o del voto di un feedback. 
+	 * Il feedback è modificabile solo da parte dell'utente che lo ha inserito e
+	 * solo entro un mese dal termine della edizione del corso
+	 * Se l'utente non può modificare un feedback si solleva una eccezione.
 	 */
 	@Override
 	public void modificaFeedback(Feedback feedback) throws DAOException {
-		// TODO Auto-generated method stub
+		try {
+			daoFeedUtente.update(feedback);
+		} catch (SQLException e) {
+			throw new DAOException("feedback " + feedback.getIdFeedback() + " non presente", e);
+		}
 
 	}
 
 	/*
-	 * eliminazione di un feedback il feedback � cancellabile solo da parte
+	 * eliminazione di un feedback il feedback è cancellabile solo da parte
 	 * dell'utente che lo ha inserito e solo entro un mese dal termine della
-	 * edizione del corso se l'utente non pu� cancellare un feedback si solleva una
+	 * edizione del corso se l'utente non può cancellare un feedback si solleva una
 	 * eccezione
 	 */
 	@Override

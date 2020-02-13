@@ -21,20 +21,20 @@ public class FeedBackDAOImpl implements FeedbackDAO {
 
 	/*
 	 * inserimento di un singolo feedbak relativo ad una edizione di un corso da
-	 * aprte di un utente se un utente ha gi� inserito un feedback per una certa
+	 * parte di un utente se un utente ha già inserito un feedback per una certa
 	 * edizione si solleva una eccezione
 	 */
 	@Override
 	public void insert(Feedback feedback) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement("INSERT INTO feedback(id_edizione,id_utente,voto) VALUES (?,?,?)");
-		ps.setInt(1, feedback.getIdEdizione());
-		ps.setString(2, feedback.getIdUtente());
-		ps.setInt(3, feedback.getVoto());
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO feedback (id_feedback, id_edizione, id_utente, descrizione, voto) VALUES (?,?,?,?)");
+		ps.setInt(1, feedback.getIdFeedback());
+		ps.setInt(2, feedback.getIdEdizione());
+		ps.setString(3, feedback.getIdUtente());
+		ps.setString(4, feedback.getDescrizione());
+		ps.setInt(5, feedback.getVoto());
 
 		ps.executeUpdate();
 	}
-
-	// codice da controllare;
 
 	/*
 	 * modifica di tutti i dati di un singolo feedback un feedback viene individuato
@@ -56,8 +56,6 @@ public class FeedBackDAOImpl implements FeedbackDAO {
 
 	}
 
-	// da controllare;
-
 	/*
 	 * cancellazione di un feedback se il feedback non esiste si solleva una
 	 * eccezione
@@ -70,10 +68,7 @@ public class FeedBackDAOImpl implements FeedbackDAO {
 		if (n == 0) {
 			throw new SQLException("feedback " + idFeedback + " non presente");
 		}
-
 	}
-
-	// da controllare;
 
 	/*
 	 * lettura di un singolo feedback scritto da un utente per una certa edizione se
