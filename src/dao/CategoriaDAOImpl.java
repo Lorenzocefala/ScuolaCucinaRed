@@ -26,8 +26,8 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 	@Override
 	public void insert(String descrizione) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement("INSERT INTO categoria(id_categoria,descrizione) VALUES (?,?");
-		// ps.setInt(1, descrizione.getIdCategoria());
-		// ps.setString(2, descrizione.getDescrizione());
+		//ps.setInt(1, descrizione.getidCategoria());
+		//ps.setString(2, descrizione.getDescrizione());
 		ps.executeUpdate();
 	}
 
