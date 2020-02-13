@@ -272,8 +272,41 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 	 */
 	@Override
 	public ArrayList<Edizione> select(int idCaregotia, boolean future) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		if (future == true) {
+			ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
+			PreparedStatement ps = conn.prepareStatement(
+					"select * from categoria c join catalogo co on(c.id_categoria= co.id_categoria)join calendario c on(c.id_categoria= co.id_categoria) where dataInizio=(select current_date());");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int idEdizione = rs.getInt("id_Edizione");
+				int idCorso = rs.getInt("id_corso");
+				Date dataInizio = rs.getDate("dataInizio");
+				int durata = rs.getInt("durata");
+				String aula = rs.getString("aula");
+				String docente = rs.getString("docente");
+
+				Edizione ed = new Edizione(idCorso, dataInizio, durata, aula, docente);
+				ed.setCodice(idEdizione);
+
+				long dataM = dataInizio.getTime();
+				long durataM = durata * 86400000L;
+				Date dataFine = new Date(dataM + durataM);
+
+				if (dataFine.before(new java.util.Date()))
+					ed.setTerminata(true);
+
+				edizioni.add(ed);
+			}
+			if (future == false) {
+				ArrayList<Edizione> edizione = new ArrayList<Edizione>();
+				PreparedStatement pss = conn.prepareStatement("select * from categoria where id_categoria=?");
+				ResultSet rss = ps.executeQuery();
+			}
+
+		}
+
+		return null; // da rivedere;
+
 	}
 
 	/*
@@ -284,21 +317,90 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 	 */
 	@Override
 	public ArrayList<Edizione> select(boolean future) throws SQLException {
-		// TODO Auto-generated method stub
+		if (future == true) {
+			ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
+			PreparedStatement ps = conn.prepareStatement(
+					"select * from categoria c join catalogo co on(c.id_categoria= co.id_categoria)join calendario c on(c.id_categoria= co.id_categoria) where dataInizio=(select current_date());");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int idEdizione = rs.getInt("id_Edizione");
+				int idCorso = rs.getInt("id_corso");
+				Date dataInizio = rs.getDate("dataInizio");
+				int durata = rs.getInt("durata");
+				String aula = rs.getString("aula");
+				String docente = rs.getString("docente");
+
+				Edizione ed = new Edizione(idCorso, dataInizio, durata, aula, docente);
+				ed.setCodice(idEdizione);
+
+				long dataM = dataInizio.getTime();
+				long durataM = durata * 86400000L;
+				Date dataFine = new Date(dataM + durataM);
+
+				if (dataFine.before(new java.util.Date()))
+					ed.setTerminata(true);
+
+				edizioni.add(ed);
+			}
+			if (future == false) {
+				ArrayList<Edizione> edizione = new ArrayList<Edizione>();
+				PreparedStatement pss = conn.prepareStatement(
+						"select * from categoria c join catalogo co on(c.id_categoria= co.id_categoria)join calendario c on(c.id_categoria= co.id_categoria);");
+				ResultSet rss = ps.executeQuery();
+				int n = pss.executeUpdate();
+				if (n == 0)
+					throw new SQLException("edizione non presente");
+			}
+
+		}
 		return null;
 	}
 
+// controllo;
 	/*
 	 * lettura di tutte le edizioni a cui � iscritto una certo utente, presenti nel
 	 * calendario dei corsi se future = true, le edizioni lette devono essere solo
-	 * quelle a partire dalla data in odierna e dell'anno corrente se future = false
+	 * quelle a partire dalla data odierna e dell'anno corrente se future = false
 	 * devono essere lette tutte le edizioni le edizioni vengono individuate in base
 	 * al idUtente se non vi sono edizioni per quella categoria o la categoria non
 	 * esiste viene ritornata una lista vuota
 	 */
 	@Override
 	public ArrayList<Edizione> select(String idUtente, boolean future) throws SQLException {
-		// TODO Auto-generated method stub
+		if (future == true) {
+			ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
+			PreparedStatement ps = conn.prepareStatement(
+					"select * from iscritti i join calendario c on(c.id_edizione= i.id_edizione) where dataInizio=(select current_date());");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int idEdizione = rs.getInt("id_Edizione");
+				int idCorso = rs.getInt("id_corso");
+				Date dataInizio = rs.getDate("dataInizio");
+				int durata = rs.getInt("durata");
+				String aula = rs.getString("aula");
+				String docente = rs.getString("docente");
+
+				Edizione ed = new Edizione(idCorso, dataInizio, durata, aula, docente);
+				ed.setCodice(idEdizione);
+
+				long dataM = dataInizio.getTime();
+				long durataM = durata * 86400000L;
+				Date dataFine = new Date(dataM + durataM);
+
+				if (dataFine.before(new java.util.Date()))
+					ed.setTerminata(true);
+
+				edizioni.add(ed);
+			}if (future == false) {
+				ArrayList<Edizione> edizione = new ArrayList<Edizione>();
+				PreparedStatement pss = conn.prepareStatement(
+						"select * from iscritti where id_utente=?"); // Select fa controllare;
+				ResultSet rss = ps.executeQuery();
+				int n = pss.executeUpdate();
+				if (n == 0)
+					throw new SQLException("edizione non presente");
+	}
+}
 		return null;
 	}
 }
