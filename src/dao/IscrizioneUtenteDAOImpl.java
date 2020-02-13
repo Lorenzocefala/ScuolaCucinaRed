@@ -32,7 +32,7 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 		ps.setInt(2, idEdizione);
 		ps.executeUpdate();
 
-		// ...
+		// ... eccezione gestita dal DB per il principio dell'integrità referenziale
 	}
 
 	/*
@@ -59,14 +59,20 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 	public ArrayList<Edizione> selectIscrizioniUtente(String idUtente) throws SQLException {
 		ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
 
-		PreparedStatement ps = conn.prepareStatement("SELECT id_edizione FROM iscritti WHERE id_utente = ?");
+		PreparedStatement ps = conn
+				.prepareStatement("SELECT * FROM iscritti join calendario using (id_edizione) WHERE id_utente = ?");
 		ps.setString(1, idUtente);
-		
+
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			String idEdizione = rs.getString("id_edizione");
+			int idEdizione = rs.getInt("id_edizione");
+			int idCorso = rs.getInt("id_corso");
+			Date dataInizio = rs.getDate("dataInizio");
+			int durata = rs.getInt("durata");
+			String aula = rs.getString("aula");
+			String docente = rs.getString("docente");
 
-			Edizione result = new Edizione();
+			Edizione result = new Edizione(idEdizione, idCorso, dataInizio, durata, aula, docente);
 			edizioni.add(result);
 		}
 		if (edizioni.size() == 0) {
@@ -82,8 +88,29 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 	 */
 	@Override
 	public ArrayList<Utente> selectUtentiPerEdizione(int idEdizione) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Utente> utenti = new ArrayList<Utente>();
+
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM iscritti join registrati using (id_utente) WHERE id_edizione = ?");
+		ps.setInt(1, idEdizione);
+
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			String idUtente = rs.getString("id_utente");
+			String password = rs.getString("password");
+			String nome = rs.getString("nome");
+			String cognome = rs.getString("cognome");
+			Date dataNascita = rs.getDate("dataNascita");
+			String email = rs.getString("email");
+			String telefono = rs.getString("telefono");
+
+			Utente result = new Utente(idUtente, password, nome, cognome, dataNascita, email, telefono, false);
+			utenti.add(result);
+		}
+		if (utenti.size() == 0) {
+			throw new SQLException("Edizione non esistente o nessun utente iscritto a questa edizione"); // due casi diversi o gestiti insieme?
+		} else {
+			return utenti;
+		}
 	}
 
 	/*
@@ -91,19 +118,14 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 	 */
 	@Override
 	public int getNumeroIscritti(int idEdizione) throws SQLException {
-		ArrayList<Utente> utenti = new ArrayList<Utente>();
-		
-		PreparedStatement ps = conn.prepareStatement("SELECT id_utente FROM iscritti WHERE id_edizione = ?");
+		int count = 0;
+		PreparedStatement ps = conn.prepareStatement("SELECT count(*) FROM iscritti WHERE id_edizione = ?");
 		ps.setInt(1, idEdizione);
-		
+
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-		//	Utente result = rs.getString("id_utente");
-		//	utenti.add(result);
-		
-		
+			count = rs.getInt("count(*)");
+		}
+		return count;
 	}
-		return 0;
-	}
-	
 }
