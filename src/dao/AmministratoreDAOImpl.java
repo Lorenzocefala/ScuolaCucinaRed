@@ -22,7 +22,7 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 
 	/*
 	 * registrazione di un nuovo amministratore.
-	 * Se già presente si solleva una eccezione
+	 * Se giï¿½ presente si solleva una eccezione
 	 */
 	@Override
 	public void insert(Utente amministratore) throws SQLException{
@@ -47,7 +47,7 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 	@Override
 	public void update(Utente amministratore) throws SQLException{
 
-		PreparedStatement ps=conn.prepareStatement("UPDATE amministratori SET password=?, nome=?, cognome=?, dataNascita=?, email=?, telefono=? where id_amministratore=?");
+		PreparedStatement ps=conn.prepareStatement("UPDATE amministratori SET descrizione=?, nome=?, cognome=?, dataNascita=?, email=?, telefono=? where id_amministratore=?");
 		ps.setString(1, amministratore.getPassword());
 		ps.setString(2, amministratore.getNome());
 		ps.setString(3, amministratore.getCognome());
@@ -64,9 +64,9 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 
 	/*
 	 * cancellazione di un amministratore individuato attraverso il suo idAmministratore.
-	 * l'amministratore potrà essere cancellato solo se non legato a nessun altro dato presente sul DB
+	 * l'amministratore potrï¿½ essere cancellato solo se non legato a nessun altro dato presente sul DB
 	 * Se non esiste viene sollevata una eccezione
-	 * Se non è cancellabile si solleva una eccezione
+	 * Se non ï¿½ cancellabile si solleva una eccezione
 	 */
 	@Override
 	public void delete(String idAmministratore) throws SQLException{
