@@ -1,16 +1,12 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import entity.Categoria;
 import entity.Corso;
-import entity.Feedback;
-import entity.Utente;
 import exceptions.ConnessioneException;
 
 public class CatalogoDAOImpl implements CatalogoDAO {
@@ -36,7 +32,6 @@ public class CatalogoDAOImpl implements CatalogoDAO {
 		ps.setString(6, corso.getDescrizione());
 
 		ps.executeUpdate();
-		// da controllare sopratutto idCorso;
 	}
 
 	/*
@@ -67,7 +62,12 @@ public class CatalogoDAOImpl implements CatalogoDAO {
 	 */
 	@Override
 	public void delete(int idCorso) throws SQLException {
-
+		PreparedStatement ps = conn.prepareStatement("DELETE FROM catalogo WHERE id_corso=?");
+		ps.setInt(1, idCorso);
+		int n = ps.executeUpdate();
+		if (n == 0)
+			throw new SQLException("corso " + idCorso + " non presente o non cancellabile");
+		// ... eccezione gestita dal DB per il principio dell'integrità referenziale
 	}
 
 	/*
@@ -82,15 +82,15 @@ public class CatalogoDAOImpl implements CatalogoDAO {
 
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			String idCodice = rs.getString("id_corso");
+			int idCodice = rs.getInt("id_corso");
 			String titolo = rs.getString("titolo");
-			String idCategoria = rs.getString("id_categoria");
-			String maxPartecipanti = rs.getString("numeromaxpartecipanti");
-			String costo = rs.getString("costo");
+			int idCategoria = rs.getInt("id_categoria");
+			int maxPartecipanti = rs.getInt("numeromaxpartecipanti");
+			double costo = rs.getDouble("costo");
 			String descrizione = rs.getString("descrizione");
 
-//			Corso result = new Corso(id_corso, titolo, idCategoria, maxPartecipanti, costo, descrizione);
-//			catalogo.add(result); // CONTROLLO, riga 96 da errore nel result come si risolve?;
+			Corso result = new Corso(titolo, idCategoria, maxPartecipanti, costo, descrizione);
+			catalogo.add(result);
 		}
 		if (catalogo.size() == 0) {
 			throw new SQLException("non ci sono corsi nel catalogo");
@@ -101,7 +101,8 @@ public class CatalogoDAOImpl implements CatalogoDAO {
 
 	/*
 	 * lettura di un singolo corso dal catalogo dei corsi se il corso non � presente
-	 * si solleva una eccezione// bisogna vedere riga 113( al posto dello 0 avevo inserito null);
+	 * si solleva una eccezione// bisogna vedere riga 113( al posto dello 0 avevo
+	 * inserito null);
 	 */
 	@Override
 	public Corso select(int idCorso) throws SQLException {
@@ -110,21 +111,21 @@ public class CatalogoDAOImpl implements CatalogoDAO {
 		ps.setInt(1, idCorso);
 
 		ResultSet rs = ps.executeQuery();
-		idCorso= 0;
+		Corso corso = null;
 		if (rs.next()) {
-			String idCodice = rs.getString("id_corso");
+			int idCodice = rs.getInt("id_corso");
 			String titolo = rs.getString("titolo");
-			String idCategoria = rs.getString("id_categoria");
-			String maxPartecipanti = rs.getString("numeromaxpartecipanti");
-			String costo = rs.getString("costo");
-			String desctrizione = rs.getString("descrizione");
+			int idCategoria = rs.getInt("id_categoria");
+			int maxPartecipanti = rs.getInt("numeromaxpartecipanti");
+			double costo = rs.getDouble("costo");
+			String descrizione = rs.getString("descrizione");
 
-//			idCorso = new idCorso(id_corso ,titolo, id_categoria, maxPartecipanti,costo,descrizione);
-//			return idCorso; stesso problema riscontrato prima alla riga 96 ;
+			corso = new Corso(titolo, idCategoria, maxPartecipanti, costo, descrizione);
+			return corso;
 		} else {
 			throw new SQLException("corso: " + idCorso + " non presente");
 		}
-		return null;
+
 	}
 
 }
