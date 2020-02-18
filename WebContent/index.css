@@ -7,20 +7,27 @@
 	padding-left: 80px;
 	text-align: center;
 	color: white;
-	background: black; 
+	background: black;
 	font-family: 'Montserrat Alternates', sans-serif;
 	font-stretch: ultra-expanded;
 }
+
 h1 {
 	letter-spacing: 7px;
 }
 
 body {
-	background-image: url("https://cdn.pixabay.com/photo/2020/02/11/21/09/bio-4840960_960_720.jpg");
+	background-image:
+		url("https://cdn.pixabay.com/photo/2020/02/11/21/09/bio-4840960_960_720.jpg");
 	background-repeat: no-repeat;
 	background-size: 110%;
 }
 
 .registrati {
 	text-align: center;
+}
+
+.my2 {
+	font-family: 'Montserrat Alternates', sans-serif;
+	color: black;
 }

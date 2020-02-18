@@ -21,6 +21,25 @@
 		<h1 id="x">Ti prendo per la gola</h1>
 		<h5>Corsi di cucina per neofiti</h5>
 	</div>
+	<div class="container-fluid my2">
+		<div class="row">
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" id="corsi">
+				<b>I nostri corsi</b>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" id="scuola">
+				<b>La scuola</b>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" id="contatti">
+				<b>Contatti</b>
+			</div>
+			<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4" id="news">
+				<b>News</b>
+			</div>
+			<div class="col-sm-2 col-md-2 col-lg-2 col-xl-2" id="accedi">
+				<b>Accedi</b>
+			</div>
+		</div>
+	</div>
 
 	<div class="container-fluid my2">
 		<div class="row">
