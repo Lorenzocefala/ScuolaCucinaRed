@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import entity.Edizione;
 import exceptions.ConnessioneException;
-import exceptions.DAOException;
 
 public class CalendarioDAOImpl implements CalendarioDAO {
 
@@ -37,14 +36,14 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 	}
 
 	/*
-	 * cancellazione di una edizione presente nel calendario dei corsi per
+	 * cancellazione di una edizione presente nel calendario dei corsi. per
 	 * cancellare una edizione � necessario prima cancellare le eventuali iscrizioni
-	 * degli utenti e i feedbacks l'edizione viene individuata in base a idEdizione
-	 * se l'edizione non � presente si solleva una eccezione
+	 * degli utenti e i feedbacks. l'edizione viene individuata in base a
+	 * idEdizione. se l'edizione non � presente si solleva una eccezione
 	 */
 	@Override
 	public void delete(int idEdizione) throws SQLException {
-		PreparedStatement ps = conn.prepareStatement("DELETE FROM calendario WHERE id_edizione=?");
+		PreparedStatement ps = conn.prepareStatement("DELETE FROM calendario WHERE id_edizione=? ");
 		ps.setInt(1, idEdizione);
 		int n = ps.executeUpdate();
 		if (n == 0) {
@@ -55,7 +54,7 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 
 	/*
 	 * modifica di tutti i dati di una edizione presente nel calendario dei corsi
-	 * l'edizione viene individuata in base al idEdizione se l'edizione non �
+	 * l'edizione viene individuata in base al idEdizione. se l'edizione non �
 	 * presente si solleva una eccezione
 	 */
 	@Override
@@ -76,16 +75,16 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 	}
 
 	/*
-	 * lettura di tutte le edizioni di una certa categoria, presenti nel calendario
-	 * dei corsi le edizioni vengono individuate in base al idCategoria se non vi
+	 * lettura di tutte le edizioni di una certa categoria presenti nel calendario
+	 * dei corsi. le edizioni vengono individuate in base al idCategoria. se non vi
 	 * sono edizioni per quella categoria o la categoria non esiste viene ritornata
 	 * una lista vuota
 	 */
 	@Override
 	public ArrayList<Edizione> select(int idCaregotia) throws SQLException {
 		ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
-		PreparedStatement ps = conn.prepareStatement(
-				"select * from calendario, catalogo where calendario.id_corso = catalogo.id_corso and id_categoria=?");
+		PreparedStatement ps = conn
+				.prepareStatement("select * from calendario join catalogo using (id_corso) where id_categoria=?");
 
 		ps.setInt(1, idCaregotia);
 		ResultSet rs = ps.executeQuery();
@@ -106,7 +105,6 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 
 			if (dataFine.before(new java.util.Date()))
 				e.setTerminata(true);
-
 			edizioni.add(e);
 
 		}
@@ -116,9 +114,9 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 	}
 
 	/*
-	 * lettura dei dati di una edizione presente nel calendario dei corsi l'edizione
-	 * viene individuata in base al idEdizione se l'edizione non � presente si
-	 * solleva una eccezione
+	 * lettura dei dati di una edizione presente nel calendario dei corsi.
+	 * l'edizione viene individuata in base al idEdizione, se l'edizione non �
+	 * presente si solleva una eccezione
 	 */
 	@Override
 	public Edizione selectEdizione(int idEdizione) throws SQLException {
@@ -144,9 +142,9 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 			if (dataFine.before(new java.util.Date()))
 				ed.setTerminata(true);
 			return ed;
-		} else
+		} else {
 			throw new SQLException("edizione " + idEdizione + " non presente");
-
+		}
 	}
 
 	/*
@@ -163,6 +161,37 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 		while (rs.next()) {
 			int idEdizione = rs.getInt("id_Edizione");
 			int idCorso = rs.getInt("id_corso");
+			Date dataInizio = rs.getDate("dataInizio");
+			int durata = rs.getInt("durata");
+			String aula = rs.getString("aula");
+			String docente = rs.getString("docente");
+
+			Edizione ed = new Edizione(idCorso, dataInizio, durata, aula, docente);
+			ed.setCodice(idEdizione);
+
+			long dataM = dataInizio.getTime();
+			long durataM = durata * 86400000L;
+			Date dataFine = new Date(dataM + durataM);
+
+			if (dataFine.before(new java.util.Date()))
+				ed.setTerminata(true);
+
+			edizioni.add(ed);
+		}
+		return edizioni;
+
+	}
+
+	// metodo aggiunto per il service
+	@Override
+	public ArrayList<Edizione> selectCorso(int idCorso) throws SQLException {
+		ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
+		PreparedStatement ps = conn.prepareStatement("select * from calendario where id_corso=?");
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			int idEdizione = rs.getInt("id_Edizione");
+			idCorso = rs.getInt("id_corso");
 			Date dataInizio = rs.getDate("dataInizio");
 			int durata = rs.getInt("durata");
 			String aula = rs.getString("aula");
@@ -272,13 +301,12 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 	 */
 	@Override
 	public ArrayList<Edizione> select(int idCaregotia, boolean future) throws SQLException {
+		ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
 		if (future == true) {
-			ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
 			PreparedStatement ps = conn.prepareStatement(
-					"select * from categoria c join catalogo co on(c.id_categoria= co.id_categoria)join calendario c on(c.id_categoria= co.id_categoria) where dataInizio=(select current_date());");
+					"select * from categoria c join catalogo co on(c.id_categoria= co.id_categoria)join calendario c on(c.id_categoria= co.id_categoria) where dataInizio=(select current_date())");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				int idEdizione = rs.getInt("id_Edizione");
 				int idCorso = rs.getInt("id_corso");
 				Date dataInizio = rs.getDate("dataInizio");
 				int durata = rs.getInt("durata");
@@ -286,26 +314,28 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 				String docente = rs.getString("docente");
 
 				Edizione ed = new Edizione(idCorso, dataInizio, durata, aula, docente);
-				ed.setCodice(idEdizione);
-
-				long dataM = dataInizio.getTime();
-				long durataM = durata * 86400000L;
-				Date dataFine = new Date(dataM + durataM);
-
-				if (dataFine.before(new java.util.Date()))
-					ed.setTerminata(true);
-
 				edizioni.add(ed);
+
 			}
-			if (future == false) {
-				ArrayList<Edizione> edizione = new ArrayList<Edizione>();
-				PreparedStatement pss = conn.prepareStatement("select * from categoria where id_categoria=?");
-				ResultSet rss = ps.executeQuery();
+		} else {
+			PreparedStatement ps = conn.prepareStatement(
+					"select * from categoria c join catalogo co on(c.id_categoria= co.id_categoria)join calendario c on(c.id_categoria= co.id_categoria) where dataInizio=(select current_date())");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int idCorso = rs.getInt("id_corso");
+				Date dataInizio = rs.getDate("dataInizio");
+				int durata = rs.getInt("durata");
+				String aula = rs.getString("aula");
+				String docente = rs.getString("docente");
+
+				Edizione ed = new Edizione(idCorso, dataInizio, durata, aula, docente);
+				edizioni.add(ed);
+
 			}
 
 		}
 
-		return null; // da rivedere;
+		return edizioni;
 
 	}
 
@@ -317,13 +347,12 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 	 */
 	@Override
 	public ArrayList<Edizione> select(boolean future) throws SQLException {
+		ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
 		if (future == true) {
-			ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
-			PreparedStatement ps = conn.prepareStatement(
-					"select * from categoria c join catalogo co on(c.id_categoria= co.id_categoria)join calendario c on(c.id_categoria= co.id_categoria) where dataInizio=(select current_date());");
+			PreparedStatement ps = conn
+					.prepareStatement("select * from calendario where dataInizio=(select current_date())");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				int idEdizione = rs.getInt("id_Edizione");
 				int idCorso = rs.getInt("id_corso");
 				Date dataInizio = rs.getDate("dataInizio");
 				int durata = rs.getInt("durata");
@@ -331,32 +360,27 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 				String docente = rs.getString("docente");
 
 				Edizione ed = new Edizione(idCorso, dataInizio, durata, aula, docente);
-				ed.setCodice(idEdizione);
-
-				long dataM = dataInizio.getTime();
-				long durataM = durata * 86400000L;
-				Date dataFine = new Date(dataM + durataM);
-
-				if (dataFine.before(new java.util.Date()))
-					ed.setTerminata(true);
-
 				edizioni.add(ed);
+
 			}
-			if (future == false) {
-				ArrayList<Edizione> edizione = new ArrayList<Edizione>();
-				PreparedStatement pss = conn.prepareStatement(
-						"select * from categoria c join catalogo co on(c.id_categoria= co.id_categoria)join calendario c on(c.id_categoria= co.id_categoria);");
-				ResultSet rss = ps.executeQuery();
-				int n = pss.executeUpdate();
-				if (n == 0)
-					throw new SQLException("edizione non presente");
+		} else {
+			PreparedStatement ps = conn.prepareStatement("select * from calendario");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int idCorso = rs.getInt("id_corso");
+				Date dataInizio = rs.getDate("dataInizio");
+				int durata = rs.getInt("durata");
+				String aula = rs.getString("aula");
+				String docente = rs.getString("docente");
+
+				Edizione ed = new Edizione(idCorso, dataInizio, durata, aula, docente);
+				edizioni.add(ed);
 			}
 
 		}
-		return null;
+		return edizioni;
 	}
 
-// controllo;
 	/*
 	 * lettura di tutte le edizioni a cui � iscritto una certo utente, presenti nel
 	 * calendario dei corsi se future = true, le edizioni lette devono essere solo
@@ -367,13 +391,12 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 	 */
 	@Override
 	public ArrayList<Edizione> select(String idUtente, boolean future) throws SQLException {
+		ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
 		if (future == true) {
-			ArrayList<Edizione> edizioni = new ArrayList<Edizione>();
 			PreparedStatement ps = conn.prepareStatement(
-					"select * from iscritti i join calendario c on(c.id_edizione= i.id_edizione) where dataInizio=(select current_date());");
+					"select * from iscritti i join calendario c on(c.id_edizione= i.id_edizione)join registrati using(id_utente=?) where dataInizio=(select current_date());");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				int idEdizione = rs.getInt("id_Edizione");
 				int idCorso = rs.getInt("id_corso");
 				Date dataInizio = rs.getDate("dataInizio");
 				int durata = rs.getInt("durata");
@@ -381,26 +404,24 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 				String docente = rs.getString("docente");
 
 				Edizione ed = new Edizione(idCorso, dataInizio, durata, aula, docente);
-				ed.setCodice(idEdizione);
-
-				long dataM = dataInizio.getTime();
-				long durataM = durata * 86400000L;
-				Date dataFine = new Date(dataM + durataM);
-
-				if (dataFine.before(new java.util.Date()))
-					ed.setTerminata(true);
-
 				edizioni.add(ed);
-			}if (future == false) {
-				ArrayList<Edizione> edizione = new ArrayList<Edizione>();
-				PreparedStatement pss = conn.prepareStatement(
-						"select * from iscritti where id_utente=?"); // Select fa controllare;
-				ResultSet rss = ps.executeQuery();
-				int n = pss.executeUpdate();
-				if (n == 0)
-					throw new SQLException("edizione non presente");
-	}
-}
-		return null;
+			}
+
+		} else {
+			PreparedStatement ps = conn.prepareStatement(
+					"select * from calendario join iscritti using(id_edizione)join registrati using(id_utente=?)");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int idCorso = rs.getInt("id_corso");
+				Date dataInizio = rs.getDate("dataInizio");
+				int durata = rs.getInt("durata");
+				String aula = rs.getString("aula");
+				String docente = rs.getString("docente");
+
+				Edizione ed = new Edizione(idCorso, dataInizio, durata, aula, docente);
+				edizioni.add(ed);
+			}
+		}
+		return edizioni;
 	}
 }

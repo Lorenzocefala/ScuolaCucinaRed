@@ -27,7 +27,7 @@ public class CatalogoDAOImpl implements CatalogoDAO {
 	@Override
 	public void insert(Corso corso) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement(
-				"INSERT INTO catalogo(id_corso,titolo,id_categoria,numeromaxpartecipanti,costo,descizione) VALUES (?,?,?,?,?,?)");
+				"INSERT INTO catalogo(id_corso,titolo,id_categoria,numeromaxpartecipanti,costo,descrizione) VALUES (?,?,?,?,?,?)");
 		ps.setInt(1, corso.getCodice());
 		ps.setString(2, corso.getTitolo());
 		ps.setInt(3, corso.getIdCategoria());
@@ -101,7 +101,8 @@ public class CatalogoDAOImpl implements CatalogoDAO {
 
 	/*
 	 * lettura di un singolo corso dal catalogo dei corsi se il corso non � presente
-	 * si solleva una eccezione// bisogna vedere riga 113( al posto dello 0 avevo inserito null);
+	 * si solleva una eccezione// bisogna vedere riga 113( al posto dello 0 avevo
+	 * inserito null);
 	 */
 	@Override
 	public Corso select(int idCorso) throws SQLException {
@@ -110,7 +111,7 @@ public class CatalogoDAOImpl implements CatalogoDAO {
 		ps.setInt(1, idCorso);
 
 		ResultSet rs = ps.executeQuery();
-		idCorso= 0;
+		idCorso = 0;
 		if (rs.next()) {
 			String idCodice = rs.getString("id_corso");
 			String titolo = rs.getString("titolo");
