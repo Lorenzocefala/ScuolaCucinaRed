@@ -13,6 +13,6 @@
 	<p>
 		Sei nella pagina iniziale, <b>complimentony</b>
 	</p>
-	<jsp:include page="registraUtente.jsp" />
+	<jsp:include page="NOregistraUtente.jsp" />
 </body>
 </html>

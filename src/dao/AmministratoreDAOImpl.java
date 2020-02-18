@@ -22,7 +22,7 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 
 	/*
 	 * registrazione di un nuovo amministratore.
-	 * Se gi� presente si solleva una eccezione
+	 * Se già presente si solleva una eccezione
 	 */
 	@Override
 	public void insert(Utente amministratore) throws SQLException{
@@ -140,10 +140,10 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 	public static void main(String[] args) throws Exception{
 		AmministratoreDAO dao= new AmministratoreDAOImpl();
 		Utente u = new Utente("aa","aa","aa","aa", new java.util.Date(),"pp","pp", true);
-//		dao.insert(u);
-//		u.setCognome("Doria");
-//		dao.delete("aa");
-//		dao.update(u);
+		dao.insert(u);
+		u.setCognome("Doria");
+		dao.delete("aa");
+		dao.update(u);
 		System.out.println(dao.select("marco81"));
 	}
 }

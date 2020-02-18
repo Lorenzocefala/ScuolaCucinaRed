@@ -1,14 +1,12 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entity.Categoria;
-import entity.Utente;
 import exceptions.ConnessioneException;
 
 public class CategoriaDAOImpl implements CategoriaDAO {
@@ -24,10 +22,10 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 	 * 
 	 */
 	@Override
-	public void insert(String descrizione) throws SQLException {
+	public void insert(Categoria descrizione) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement("INSERT INTO categoria(id_categoria,descrizione) VALUES (?,?");
-		//ps.setInt(1, descrizione.getidCategoria());
-		//ps.setString(2, descrizione.getDescrizione());
+		ps.setInt(1, descrizione.getIdCategoria());
+		ps.setString(2, descrizione.getDescrizione());
 		ps.executeUpdate();
 	}
 
@@ -39,19 +37,17 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 	public void update(Categoria c) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement("UPDATE categoria SET categoria=? where id_categoria=?");
 		ps.setString(1, c.getDescrizione());
-		ps.setInt(5, c.getIdCategoria());
+		ps.setInt(2, c.getIdCategoria());
 		int n = ps.executeUpdate();
 		if (n == 0)
 			throw new SQLException("Categoria: " + c.getIdCategoria() + " non presente");
 
 	}
 
-	// controllo;
-
 	/*
-	 * cancellazione di una singola categoria una categoria si pu� cancellare solo
-	 * se non ci sono dati correlati se la categoria non esiste o non � cancellabile
-	 * si solleva una eccezione
+	 * cancellazione di una singola categoria. Una categoria si può cancellare solo
+	 * se non ci sono dati correlati. Se la categoria non esiste o non è
+	 * cancellabile si solleva una eccezione
 	 */
 	@Override
 	public void delete(int idCategoria) throws SQLException {
@@ -62,8 +58,6 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 			throw new SQLException("Categoria " + idCategoria + " non presente");
 
 	}
-
-// CONTROLLO;
 
 	/*
 	 * lettura di una singola categoria in base al suo id se la categoria non esiste
@@ -79,37 +73,34 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 		Categoria categoria = null;
 		if (rs.next()) {
 			int IdCategoria = rs.getInt("id_categoria");
-			String Categoria = rs.getString("categoria");
+			String descrizione = rs.getString("descrizione");
 
-			categoria = new Categoria(IdCategoria, Categoria);
+			categoria = new Categoria(IdCategoria, descrizione);
 			return categoria;
 		} else {
 			throw new SQLException("Categoria: " + idCategoria + " non presente");
 		}
-// controllo;
 	}
 
 	/*
-	 * lettura di tutte le categorie se non vi sono categoria il metodo ritorna una
+	 * lettura di tutte le categorie. Se non vi sono categorie il metodo ritorna una
 	 * lista vuota
 	 */
 	@Override
 	public ArrayList<Categoria> select() throws SQLException {
-		ArrayList<Categoria> c = new ArrayList<Categoria>();
+		ArrayList<Categoria> categorie = new ArrayList<Categoria>();
 
 		PreparedStatement ps = conn.prepareStatement("SELECT * FROM categoria");
 
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			String idCategoria = rs.getString("id_categoria");
-			String categoria = rs.getString("categoria");
-			
+			int idCategoria = rs.getInt("id_categoria");
+			String descrizione = rs.getString("descrizione");
 
-			//Utente categorie = new Utente(idCategoria, categoria);
-			// c.add(categorie);
+			Categoria categoria = new Categoria(idCategoria, descrizione);
+			categorie.add(categoria);
 		}
-		return c;
+		return categorie;
 
-	}  
-// Condice purtroppo scritto con errori, errori che non riesco a risolvere.
+	}
 }
