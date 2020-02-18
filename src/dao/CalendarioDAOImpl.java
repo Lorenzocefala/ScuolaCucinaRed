@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import entity.Edizione;
 import exceptions.ConnessioneException;
-import exceptions.DAOException;
 
 public class CalendarioDAOImpl implements CalendarioDAO {
 

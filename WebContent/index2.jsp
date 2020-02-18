@@ -24,7 +24,6 @@
 
 	<div class="container-fluid my2">
 		<div class="row">
-			<div class="col">FOTO CIBO</div>
 			<div class="col" id="registrati">
 				<form action="regUtente">
 					<table>
@@ -108,6 +107,7 @@
 					</table>
 				</form>
 			</div>
+			<div class="col">ALTRE COSE</div>
 		</div>
 	</div>
 

@@ -7,7 +7,7 @@ import entity.Categoria;
 
 
 public interface CategoriaDAO {
-	void insert(String descrizione) throws SQLException;
+	void insert(Categoria descrizione) throws SQLException;
 	void update(Categoria c) throws SQLException;
 	void delete(int idCategoria) throws SQLException;
 	Categoria select(int idCategoria) throws SQLException;
