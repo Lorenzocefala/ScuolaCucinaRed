@@ -5,5 +5,11 @@
 }
 
 .sfondo {
-	padding: 150px;
+	background-image:
+		url("https://d39l2hkdp2esp1.cloudfront.net/img/photo/140991/140991_00_2x.jpg");
+	background-repeat: no-repeat;
+	background-size: 110%;
+	padding: 130px;
 }
+
+/* https://cdn.pixabay.com/photo/2015/09/16/20/10/dough-943245_960_720.jpg */
