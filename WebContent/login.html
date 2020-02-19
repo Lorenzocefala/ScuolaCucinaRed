@@ -5,8 +5,9 @@
 <title>Login</title>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="login.css">
 </head>
-<body>
+<body leftmargin=500 topmargin=500 rightmargin=500 class="sfondo">
 	<div class="container-fluid login">
 		<div class="row">
 			<img src="https://cdn.onlinewebfonts.com/svg/img_481735.png"
@@ -14,26 +15,28 @@
 		</div>
 		<br>
 		<div class="d-flex justify-content-center">
+			<fieldset class="bordo">
 			<h3>Accedi al sito:</h3>
+				<form action="/login" method="post">
+					<div>
+						<label for="username">Username</label> <br> <input
+							type="text" id="username" name="user">
+					</div>
+					<br>
+					<div>
+						<label for="psw">Password</label> <br> <input type="password"
+							id="psw" name="password">
+					</div>
+					<br>
+					<div class="d-flex justify-content-center">
+						<button type="submit" class="btn btn-primary mb-2">Login</button>
+					</div>
+
+				</form>
+			</fieldset>
 		</div>
 		<br>
-		<div class="d-flex justify-content-center">
-			<form action="/login" method="post">
-				<div>
-					<label for="username">Username</label> <br> <input type="text"
-						id="username" name="user">
-				</div>
-				<br>
-				<div>
-					<label for="psw">Password</label> <br> <input type="password"
-						id="psw" name="password">
-				</div>
-				<br>
-				<div class="d-flex justify-content-center">
-					<button type="submit" class="btn btn-primary mb-2">Login</button>
-				</div>
-			</form>
-		</div>
+		<h6 class="d-flex justify-content-center">Non sei ancora registrato? <a href = "http://localhost:8080/ScuolaCucina11/index2.jsp"> &nbsp;Crea un account</a>.</h6>
 	</div>
 </body>
 </html>
